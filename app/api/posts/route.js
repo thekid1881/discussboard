@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 
+export const runtime = 'nodejs'
+
 export async function GET() {
     const { data, error } = await supabase
         .from('posts')

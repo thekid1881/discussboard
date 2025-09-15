@@ -72,7 +72,7 @@ export default function Posts() {
     return (
         <div className="grid grid-cols-2 justify-items-center mt-3 mx-3">
             <div className="col-start-1 w-full py-4 px-8">
-                <form className="bg-[#f2836f] border-transparent rounded-md p-4">
+                <form>
                     <label className="font-bold text-xl mb-2">
                         {replyTo ? 'Replying to Post' : 'Create New Post'}
                     </label>
@@ -93,7 +93,7 @@ export default function Posts() {
                     <input
                         type="file"
                         id="imageFileInput"
-                        className="bg-[#f2836f] border-transparent text-[#f2836f]"
+                        className="text-sm text-gray-400 mx-2"
                         accept="Image/*"
                         onChange={(e) => setImageFile(e.target.files[0])}
                     />
