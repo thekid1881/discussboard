@@ -17,47 +17,54 @@ export async function GET() {
 }
 
 export async function POST(req) {
-    const formData = await req.formData()
-    const content = formData.get('content')
-    const imageFile = formData.get('image')
+    try {
+        const formData = await req.formData()
+        const content = formData.get('content')
+        const imageFile = formData.get('image')
 
-    let imageUrl = null
+        let imageUrl = null
+        
+        if (imageFile && imageFile.size > 0) {
+            const fileExt = imageFile.type.split('/').pop() || 'jpg'
+            const fileName = `${Date.now()}.${fileExt}`
+            const filePath = `public/${fileName}`
 
-    if (imageFile && typeof imageFile.name === 'string') {
-        const fileExt = imageFile.name.splite('.').pop()
-        const fileName = `${Date.now()}.${fileExt}`
-        const filePath = `public/${fileName}`
+            const { error: uploadError } = await supabase.storage
+                .from('post-images')
+                .upload(filePath, imageFile, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: imageFile.type,
+                })
 
-        const { error: uploadError } = await supabase.storage
-            .from('post-images')
-            .upload(filePath, imageFile, {
-                cacheControl: '3600',
-                upsert: false,
-                contentType: imageFile.type,
-            })
+            if (uploadError) {
+                console.error('UPLOAD ERROR:', uploadError)
+                return NextResponse.json({ error: uploadError.message }, { status: 500 })
+            }
 
-        if (uploadError) {
-            return NextResponse.json({ error: uploadError.message }, { status: 500 })
+            const { data: publicUrlData } = supabase.storage
+                .from('post-images')
+                .getPublicUrl(filePath)
+
+            imageUrl = publicUrlData?.publicUrl
         }
 
-        const { data: publicUrlData } = supabase.storage
-            .from('post-images')
-            .getPublicUrl(filePath)
+        const { data, error } = await supabase
+            .from('posts')
+            .insert([{ content, image_url: imageUrl }])
+            .select()
+            .single()
 
-        imageUrl = publicUrlData?.publicUrl
+        if (error) {
+            console.error('INSERT ERROR:', error)
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+
+        return NextResponse.json(data, { status: 201 })
+    } catch (err) {
+        console.error('UNEXPECTED ERROR:', err)
+        return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 })
     }
-
-    const { data, error } = await supabase
-        .from('posts')
-        .insert([{ content, image_url: imageUrl }])
-        .select()
-        .single()
-
-    if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
-    }
-
-    return NextResponse.json(data, { status: 201 })
 }
 
 export async function DELETE(req) {
