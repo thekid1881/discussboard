@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -32,7 +33,12 @@ export default async function Dashboard() {
                 <p>Placeholder</p>
               </div>
               <div className="col-start-2 px-18 py-12">
-                <p>Placeholder</p>
+                <Link
+                  href="/posts"
+                  className="border-solid border-3 rounded-md border-[#fa8616] bg-transparent hover:bg-gray-500 hover:text-white hover:underline hover:border-transparent p-4"
+                >
+                  Go to Discussion Board
+                </Link>
               </div>
             </div>
           </div>
