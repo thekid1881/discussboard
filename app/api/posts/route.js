@@ -15,23 +15,47 @@ export async function GET() {
 }
 
 export async function POST(req) {
-    const body = await req.json()
-    const { content, parent_id =null } = body
+    const formData = await req.formData()
+    const content = formData.get('content')
+    const imageFile = formData.get('image')
 
-    if (!content) {
-        return NextResponse.json({ error: 'Content is required' }, { status: 400 });
+    let imageUrl = null
+
+    if (imageFile && typeof imageFile.name === 'string') {
+        const fileExt = imageFile.name.splite('.').pop()
+        const fileName = `${Date.now()}.${fileExt}`
+        const filePath = `public/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+            .from('post-images')
+            .upload(filePath, imageFile, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: imageFile.type,
+            })
+
+        if (uploadError) {
+            return NextResponse.json({ error: uploadError.message }, { status: 500 })
+        }
+
+        const { data: publicUrlData } = supabase.storage
+            .from('post-images')
+            .getPublicUrl(filePath)
+
+        imageUrl = publicUrlData?.publicUrl
     }
 
     const { data, error } = await supabase
         .from('posts')
-        .insert([{ content, parent_id }])
-        .select();
+        .insert([{ content, image_url: imageUrl }])
+        .select()
+        .single()
 
     if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json(data[0], { status: 201 });
+    return NextResponse.json(data, { status: 201 })
 }
 
 export async function DELETE(req) {

@@ -7,6 +7,7 @@ export default function Posts() {
     const [loading, setLoading] = useState(true);
     const [newContent, setNewContent] = useState('');
     const [replyTo, setReplyTo] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
 
     const fetchPosts = async () => {
         setLoading(true)
@@ -17,15 +18,25 @@ export default function Posts() {
     }
 
     const handleSubmit = async () => {
+        const formData = new FormData()
+
         if (!newContent.trim()) return
         
-        await fetch('/api/posts', {
+        formData.append('content', newContent)
+
+        if (imageFile) {
+            formData.append('image', imageFile)
+        }
+
+        const res = await fetch('/api/posts', {
             method: 'POST',
-            body: JSON.stringify({ content: newContent, parent_id: replyTo }),
+            body: formData,
         })
 
+        const newPost = await res.json()
+        setPosts([newPost, ...posts])
         setNewContent('')
-        setReplyTo(null)
+        setImageFile(null)
         fetchPosts()
     }
 
@@ -61,17 +72,31 @@ export default function Posts() {
     return (
         <div className="grid grid-cols-2 justify-items-center mt-3 mx-3">
             <div className="col-start-1 w-full py-4 px-8">
-                <h3 className="font-bold text-xl mb-2">
-                    {replyTo ? 'Replying to Post' : 'Create New Post'}
-                </h3>
-                <textarea
-                    className="w-full border rounded p-2 bg-white"
-                    rows="3"
-                    value={newContent}
-                    placeholder="Enter post content here..."
-                    onChange={(e) => setNewContent(e.target.value)}
-                />
-                <div className="flex gap-2 mt-2">
+                <form className="bg-[#f2836f] border-transparent rounded-md p-4">
+                    <label className="font-bold text-xl mb-2">
+                        {replyTo ? 'Replying to Post' : 'Create New Post'}
+                    </label>
+                    <textarea
+                        className="w-full border rounded p-2 bg-white"
+                        rows="3"
+                        value={newContent}
+                        placeholder="Enter post content here..."
+                        onChange={(e) => setNewContent(e.target.value)}
+                        required
+                    />
+                    <label 
+                        htmlFor="imageFileInput"
+                        className="cursor-pointer bg-gray-300 p-2 rounded-md border-solid border-1 border-gray-700"
+                    >
+                        Attach Image
+                    </label>
+                    <input
+                        type="file"
+                        id="imageFileInput"
+                        className="bg-[#f2836f] border-transparent text-[#f2836f]"
+                        accept="Image/*"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                    />
                     <button
                         className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline"
                         onClick={handleSubmit}
@@ -86,7 +111,7 @@ export default function Posts() {
                             Cancel Reply
                         </button>
                     )}
-                </div>
+                </form>
             </div>
             <div className="col-start-2 w-full py-4 px-8 border-solid border-2 rounded-md border-gray-500">
                 <h2 className="font-bold text-xl mb-2">
@@ -96,6 +121,9 @@ export default function Posts() {
                 {!loading && topLevelPosts.map(post => (
                     <div key={post.id} className="border p-2 rounded bg-white my-3">
                         <p className="px-2 py-1">{post.content}</p>
+                        {post.image_url && (
+                            <img src={post.image_url} alt="Attached" style={{ maxWidth: '300px' }} />
+                        )}
                         <button
                             className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline mx-2 my-1"
                             onClick={() => setReplyTo(post.id)}
