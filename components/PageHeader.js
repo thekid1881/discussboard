@@ -12,7 +12,7 @@ export default function PageHeader() {
             href="/"
           >
             <Image
-              src="/kidkraftkonvo-logofinal.png"
+              src="/kollagelogo.png"
               href="/"
               width={300}
               height={100}

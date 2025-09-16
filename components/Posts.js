@@ -74,7 +74,7 @@ export default function Posts() {
             <div className="col-start-1 w-full py-4 px-8">
                 <form>
                     <label className="font-bold text-xl mb-2">
-                        {replyTo ? 'Replying to Post' : 'Create New Post'}
+                        {replyTo ? 'Replying to Post' : 'Create New Kontent'}
                     </label>
                     <textarea
                         className="w-full border rounded p-2 bg-white"
@@ -115,23 +115,17 @@ export default function Posts() {
             </div>
             <div className="col-start-2 w-full py-4 px-8">
                 <h2 className="font-bold text-xl mb-2">
-                    Posts
+                    Kollage Posts
                 </h2>
                 {loading && <p>Loading...</p>}
                 {!loading && topLevelPosts.map(post => (
                     <div key={post.id} className="border p-2 rounded bg-white my-3">
-                        <p className="px-2 py-1">{post.content}</p>
+                        <p className="px-4 py-2">{post.content}</p>
                         {post.image_url && (
-                            <img src={post.image_url} alt="Attached" style={{ maxWidth: '300px' }} />
+                            <img src={post.image_url} alt="Attached" style={{ maxWidth: '300px', borderRadius: '10px', paddingLeft: '20px' }} />
                         )}
                         <button
-                            className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline mx-2 my-1"
-                            onClick={() => setReplyTo(post.id)}
-                        >
-                            Reply
-                        </button>
-                        <button
-                            className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline mx-2 my-1"
+                            className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline mx-4 my-2"
                             onClick={() => handleDelete(post.id)}
                         >
                             Delete

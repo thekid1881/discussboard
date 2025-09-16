@@ -14,7 +14,7 @@ export default async function PostsPage() {
 
     return (
         <div className="font-sans flex grid-rows-2 items-center justify-items-center bg-gradient-to-r from-[#f69537] via-[#EB6E58] to-[#DF3267] to-90%">
-            <main className="h-screen w-screen overflow-x-hidden overflow-y-hidden">
+            <main className="h-full w-screen overflow-x-hidden overflow-y-hidden">
                 <div className="w-full row-start-1 h-1/4 pt-12">
                     <PageHeader />
                 </div>
@@ -22,7 +22,7 @@ export default async function PostsPage() {
                     <div className="grid grid-rows-[1fr_3fr] h-full">
                         <div className="w-full row-start-1">
                             <h1 className="text-6xl text-center justify-items-center h-full py-2">
-                                Discussion Board
+                                Kollage Board
                             </h1>
                         </div>
                         <div className="w-full row-start-2 pt-4 pr-2">

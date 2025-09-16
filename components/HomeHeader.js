@@ -4,7 +4,7 @@ export default function HomeHeader() {
     return (
         <div className="bg-transparent border-transparent rounded-md text-center justify-items-center text-8xl">
           <Image
-            src="/kidkraftkonvo-logofinal.png"
+            src="/kollagelogo.png"
             alt="kid kraft logo"
             width={600}
             height={200}
