@@ -93,7 +93,7 @@ export default function Posts() {
                     <input
                         type="file"
                         id="imageFileInput"
-                        className="text-sm text-gray-400 mx-2"
+                        className="text-sm text-gray-500 mx-2"
                         accept="Image/*"
                         onChange={(e) => setImageFile(e.target.files[0])}
                     />
@@ -113,7 +113,7 @@ export default function Posts() {
                     )}
                 </form>
             </div>
-            <div className="col-start-2 w-full py-4 px-8 border-solid border-2 rounded-md border-gray-500">
+            <div className="col-start-2 w-full py-4 px-8">
                 <h2 className="font-bold text-xl mb-2">
                     Posts
                 </h2>
