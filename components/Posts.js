@@ -98,7 +98,7 @@ export default function Posts() {
                         onChange={(e) => setImageFile(e.target.files[0])}
                     />
                     <button
-                        className="bg-gray-300 px-2 py-1 border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline"
+                        className="bg-gray-300 px-2 py-1 cursor-pointer border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline"
                         onClick={handleSubmit}
                     >
                         Submit

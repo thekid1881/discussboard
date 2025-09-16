@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -28,16 +29,25 @@ export default async function Dashboard() {
                 Welcome, {session.user.name}!
               </h3>
             </div>
-            <div className="row-start-2 grid grid-cols-2 mt-12">
-              <div className="col-start-1 mr-32 py-12 pr-22 border-r-4 border-solid border-r-gray-900">
-                <p>Placeholder</p>
+            <div className="row-start-2 grid grid-cols-2">
+              <div className="col-start-1 flex flex-col mr-32 py-12 pr-22 border-r-4 border-solid border-r-gray-900 items-center text-center">
+                <p className="text-xl text-center">
+                  Placeholder for personal<br/>
+                  kollage board content
+                </p>
+                <Image
+                  src="/uicontent.png"
+                  alt="UI content"
+                  width={50}
+                  height={50}
+                />
               </div>
               <div className="col-start-2 px-18 py-12">
                 <Link
                   href="/posts"
-                  className="border-solid border-3 rounded-md border-[#fa8616] bg-transparent hover:bg-gray-500 hover:text-white hover:underline hover:border-transparent p-4"
+                  className="bg-gray-300 px-4 py-2 cursor-pointer border-solid border-1 border-gray-700 rounded-md hover:bg-gray-500 hover:text-white hover:underline"
                 >
-                  Go to Discussion Board
+                  Go to Kollage Board
                 </Link>
               </div>
             </div>
